@@ -1,6 +1,9 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import "./lib/particles.js";
+
+declare const particlesJS: any;
 
 const FINAL_POS: Array<number>[] = [
   [-140, -140],
@@ -10,6 +13,9 @@ const FINAL_POS: Array<number>[] = [
 ];
 
 function animation() {
+  particlesJS.load("particle-wrapper-intro", "/particle.config.json", () => {});
+  particlesJS.load("particle-wrapper-outro", "/particle.config.json", () => {});
+
   config();
 
   const images = document.querySelectorAll(".cards-timeline-image");
