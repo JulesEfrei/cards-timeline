@@ -4,7 +4,7 @@ import Lenis from "lenis";
 
 const FINAL_POS: Array<number>[] = [
   [-140, -140],
-  [-40, 130],
+  [40, -130],
   [-160, 40],
   [20, 30],
 ];
@@ -57,6 +57,36 @@ function animation() {
         } else {
           y = -50;
           rotation = initialRotation;
+        }
+
+        const gridStaggerPoints = [0.5, 0.55, 0.6, 0.65];
+        const gridStartTime = gridStaggerPoints[index];
+        const gridEndTime = Math.min(
+          gridStartTime + (0.95 - gridStartTime) * 0.9,
+          0.95,
+        );
+
+        const finalX = FINAL_POS[index][0];
+        const finalY = FINAL_POS[index][1];
+
+        if (progress >= gridStartTime && progress <= 0.95) {
+          let gridLocalProgress;
+
+          if (progress >= gridEndTime) {
+            gridLocalProgress = 1;
+          } else {
+            const linearProgress =
+              (progress - gridStartTime) / (gridEndTime - gridStartTime);
+            gridLocalProgress = 1 - Math.pow(1 - linearProgress, 3);
+          }
+
+          x = -50 + (finalX + 50) * gridLocalProgress;
+          y = -50 + (finalY + 50) * gridLocalProgress;
+          rotation = initialRotation * (1 - gridLocalProgress);
+        } else if (progress >= 0.95) {
+          x = finalX;
+          y = finalY;
+          rotation = 0;
         }
 
         gsap.set(image, {
